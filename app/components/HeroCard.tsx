@@ -2,8 +2,11 @@ import Image from "next/image";
 import { Hero } from "@/lib/types";
 
 // Dota 2 official CDN for hero images
-const getDotaImageUrl = (slug: string) =>
-  `https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/${slug}.png`;
+const getDotaImageUrl = (slug: string) => {
+  // Fix para kay Centaur na gumagamit ng 'centaur' imbes na 'centaur_warrunner'
+  const imageSlug = slug === 'centaur_warrunner' ? 'centaur' : slug;
+  return `https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/${imageSlug}.png`;
+};
 
 // Attribute badge colors
 const attrColors: Record<string, string> = {
