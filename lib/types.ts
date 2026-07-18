@@ -4,6 +4,7 @@ export type Hero = {
   slug: string;
   primary_attr: "str" | "agi" | "int" | "uni";
   roles: string[];
+  opendota_id: number;
 };
 
 export type HeroCounter = {
@@ -18,5 +19,6 @@ export type HeroWithCounters = {
   slug: string;
   primary_attr: "str" | "agi" | "int" | "uni";
   roles: string[];
+  opendota_id: number;
   counters: HeroCounter[];
 };

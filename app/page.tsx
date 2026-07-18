@@ -1,6 +1,11 @@
 import { Swords } from "lucide-react";
+import Link from "next/link";
 import { getAllHeroes } from "@/lib/queries";
 import HeroGrid from "@/app/components/HeroGrid";
+
+// I-add ito sa pinakataas ng app/page.tsx
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function Home() {
   // This runs on the SERVER — fast, secure, no loading spinner needed
@@ -32,6 +37,16 @@ export default async function Home() {
               <span className="text-emerald-400 font-bold">{heroes.length}</span> Heroes
             </span>
           </div>
+
+          {/* Draft Picker Link */}
+          <Link
+            href="/draft"
+            className="ml-3 text-xs font-semibold bg-emerald-500/10 border 
+                       border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 
+                       px-3 py-1 rounded-full transition-colors"
+          >
+            Draft Picker →
+          </Link>
         </div>
       </header>
 
