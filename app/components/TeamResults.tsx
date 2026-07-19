@@ -103,7 +103,7 @@ export default function TeamResults({
         {top5.map((hero, index) => (
           <div
             key={hero.id}
-            className="flex items-center gap-3 p-3 bg-gray-800/60
+            className="flex items-center gap-2 p-2 sm:p-3 bg-gray-800/60
                        border border-gray-700/50 rounded-xl
                        hover:border-gray-600 transition-all"
           >
@@ -114,7 +114,7 @@ export default function TeamResults({
             </span>
 
             {/* Portrait */}
-            <div className="relative w-14 h-9 rounded-lg overflow-hidden flex-shrink-0">
+            <div className="relative w-12 h-8 sm:w-14 sm:h-9 rounded-lg overflow-hidden flex-shrink-0">
               <Image
                 src={getDotaImageUrl(hero.slug)}
                 alt={hero.name}
@@ -126,7 +126,7 @@ export default function TeamResults({
 
             {/* Info */}
             <div className="flex-1 min-w-0">
-              <p className={`font-bold text-sm ${attrColors[hero.primary_attr]}`}>
+              <p className={`font-bold text-xs sm:text-sm truncate ${attrColors[hero.primary_attr]}`}>
                 {hero.name}
               </p>
 
@@ -154,14 +154,14 @@ export default function TeamResults({
             {/* Stats */}
             <div className="flex flex-col items-end gap-1 flex-shrink-0">
               <div className="flex items-center gap-1">
-                <TrendingUp size={11} className="text-red-400" />
-                <span className="text-red-400 font-bold text-xs">
+                <TrendingUp size={10} className="text-red-400" />
+                <span className="text-red-400 font-bold text-[11px] sm:text-xs">
                   +{hero.avg_disadvantage.toFixed(2)}%
                 </span>
               </div>
               <div className="flex items-center gap-1">
-                <Users size={11} className="text-gray-500" />
-                <span className="text-gray-500 text-[10px]">
+                <Users size={10} className="text-gray-500" />
+                <span className="text-gray-500 text-[9px] sm:text-[10px]">
                   {hero.matchup_count}/{enemyCount}
                 </span>
               </div>

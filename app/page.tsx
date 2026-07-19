@@ -3,12 +3,10 @@ import Link from "next/link";
 import { getAllHeroes } from "@/lib/queries";
 import HeroGrid from "@/app/components/HeroGrid";
 
-// I-add ito sa pinakataas ng app/page.tsx
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function Home() {
-  // This runs on the SERVER — fast, secure, no loading spinner needed
   const heroes = await getAllHeroes();
 
   return (
@@ -50,10 +48,9 @@ export default async function Home() {
         </div>
       </header>
 
-      {/* ── Hero Grid (Client Component) ── */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      {/* ── Hero Grid Container ── */}
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
         {heroes.length === 0 ? (
-          // Supabase returned nothing — likely an env variable issue
           <div className="text-center py-20">
             <p className="text-4xl mb-4">⚠️</p>
             <p className="text-red-400 font-semibold text-lg">

@@ -45,7 +45,6 @@ export default function DraftPage() {
 
   // ── Lane mode handlers ──
   const addLaneEnemy = (hero: Hero) => {
-    // Max 2 enemies in lane (realistic — you face at most 2 in your lane)
     if (laneEnemies.length >= 2) return;
     setLaneEnemies((prev) => [...prev, { hero, position: null }]);
   };
@@ -132,7 +131,7 @@ export default function DraftPage() {
             opendota_id: e.hero.opendota_id,
             position: e.position,
           })),
-          roleId: null, // no role filter for team mode
+          roleId: null,
           mode: "team",
         }),
       });
@@ -181,32 +180,36 @@ export default function DraftPage() {
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
 
         {/* Mode Toggle */}
-        <div className="flex items-center justify-center gap-3 mb-8">
+        <div className="flex items-center justify-center gap-2 sm:gap-3 mb-6 sm:mb-8">
           <button
             onClick={() => setMode("lane")}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border
-                        font-semibold text-sm transition-all
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 
+                        py-2 sm:py-2.5 rounded-xl border font-semibold 
+                        text-xs sm:text-sm transition-all flex-1 sm:flex-none
+                        justify-center
                         ${mode === "lane"
                           ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-300"
                           : "bg-gray-800/40 border-gray-700 text-gray-400 hover:border-gray-500"
                         }`}
           >
-            <Shield size={15} />
+            <Shield size={14} />
             Lane Matchup
           </button>
           <button
             onClick={() => setMode("team")}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border
-                        font-semibold text-sm transition-all
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5
+                        py-2 sm:py-2.5 rounded-xl border font-semibold
+                        text-xs sm:text-sm transition-all flex-1 sm:flex-none
+                        justify-center
                         ${mode === "team"
                           ? "bg-blue-500/20 border-blue-500/50 text-blue-300"
                           : "bg-gray-800/40 border-gray-700 text-gray-400 hover:border-gray-500"
                         }`}
           >
-            <Users size={15} />
+            <Users size={14} />
             Full Team Counter
           </button>
         </div>
@@ -224,39 +227,18 @@ export default function DraftPage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Left — inputs */}
               <div className="space-y-4">
-
-                {/* My role */}
                 <div className="bg-gray-900/60 border border-gray-800 rounded-2xl p-5">
                   <RoleSelector
                     selectedRole={myRole}
                     onChange={(r) => { setMyRole(r); setLaneResults([]); }}
                   />
-                  {myRole && (
-                    <p className="text-center text-xs mt-3">
-                      {laneRoleFiltered ? (
-                        <span className="text-emerald-500/70">
-                          ✓ Showing heroes that play{" "}
-                          <span className="font-semibold text-emerald-400 capitalize">
-                            {myRole.replace("_", " ")}
-                          </span>
-                        </span>
-                      ) : laneResults.length > 0 ? (
-                        <span className="text-yellow-500/70">
-                          ⚠️ Not enough role-specific data — showing all roles
-                        </span>
-                      ) : null}
-                    </p>
-                  )}
                 </div>
 
-                {/* Lane enemies (max 2) */}
                 <div className="bg-gray-900/60 border border-gray-800 rounded-2xl p-5">
                   {heroesLoading ? (
                     <div className="flex items-center justify-center py-6 gap-2">
-                      <div className="w-4 h-4 border-2 border-emerald-400
-                                      border-t-transparent rounded-full animate-spin" />
+                      <div className="w-4 h-4 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin" />
                       <span className="text-gray-500 text-sm">Loading heroes...</span>
                     </div>
                   ) : (
@@ -289,7 +271,6 @@ export default function DraftPage() {
                 )}
               </div>
 
-              {/* Right — results */}
               <div className="bg-gray-900/60 border border-gray-800 rounded-2xl p-5">
                 <LaneResults
                   results={laneResults}
@@ -317,13 +298,11 @@ export default function DraftPage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Left — inputs */}
               <div className="space-y-4">
                 <div className="bg-gray-900/60 border border-gray-800 rounded-2xl p-5">
                   {heroesLoading ? (
                     <div className="flex items-center justify-center py-6 gap-2">
-                      <div className="w-4 h-4 border-2 border-blue-400
-                                      border-t-transparent rounded-full animate-spin" />
+                      <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
                       <span className="text-gray-500 text-sm">Loading heroes...</span>
                     </div>
                   ) : (
@@ -355,7 +334,6 @@ export default function DraftPage() {
                 )}
               </div>
 
-              {/* Right — results */}
               <div className="bg-gray-900/60 border border-gray-800 rounded-2xl p-5">
                 <TeamResults
                   results={teamResults}

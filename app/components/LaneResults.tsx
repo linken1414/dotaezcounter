@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { TrendingUp, Star, Shield } from "lucide-react";
+import { TrendingUp, Star } from "lucide-react";
 import { Hero } from "@/lib/types";
 
 const getDotaImageUrl = (slug: string) =>
@@ -120,7 +120,7 @@ export default function LaneResults({
         {top5.map((hero, index) => (
           <div
             key={hero.id}
-            className={`flex items-center gap-3 p-3 rounded-xl border
+            className={`flex items-center gap-2 p-2 sm:p-3 rounded-xl border
                         transition-all ${rankStyles[index]}`}
           >
             {/* Rank */}
@@ -130,7 +130,8 @@ export default function LaneResults({
             </span>
 
             {/* Portrait */}
-            <div className="relative w-14 h-9 rounded-lg overflow-hidden flex-shrink-0">
+            <div className="relative w-12 h-8 sm:w-14 sm:h-9 rounded-lg
+                            overflow-hidden flex-shrink-0">
               <Image
                 src={getDotaImageUrl(hero.slug)}
                 alt={hero.name}
@@ -142,18 +143,19 @@ export default function LaneResults({
 
             {/* Info */}
             <div className="flex-1 min-w-0">
-              <p className={`font-bold text-sm ${attrColors[hero.primary_attr]}`}>
+              <p className={`font-bold text-xs sm:text-sm truncate
+                             ${attrColors[hero.primary_attr]}`}>
                 {hero.name}
               </p>
-              <p className="text-[10px] text-gray-500 truncate">
+              <p className="text-[9px] sm:text-[10px] text-gray-500 truncate">
                 {hero.roles?.slice(0, 2).join(" · ")}
               </p>
             </div>
 
             {/* Disadvantage */}
             <div className="flex items-center gap-1 flex-shrink-0">
-              <TrendingUp size={11} className="text-red-400" />
-              <span className="text-red-400 font-bold text-xs">
+              <TrendingUp size={10} className="text-red-400" />
+              <span className="text-red-400 font-bold text-[11px] sm:text-xs">
                 +{hero.avg_disadvantage.toFixed(2)}%
               </span>
             </div>

@@ -49,7 +49,8 @@ export default function HeroCard({ hero, onClick }: HeroCardProps) {
       </div>
 
       {/* Hero Name */}
-      <p className="text-white text-xs font-semibold text-center leading-tight mb-1.5 line-clamp-2">
+      <p className="text-white text-[10px] sm:text-xs font-semibold 
+                    text-center leading-tight mb-1.5 line-clamp-2">
         {hero.name}
       </p>
 

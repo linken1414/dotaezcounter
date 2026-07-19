@@ -8,19 +8,17 @@ import { Hero } from "@/lib/types";
 const getDotaImageUrl = (slug: string) =>
   `https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/${slug}.png`;
 
-const MAX_ENEMIES = 5;
-
 export type EnemyEntry = {
   hero: Hero;
   position: number | null;
 };
 
 const POSITIONS = [
-  { value: 1, label: "Pos 1", sublabel: "Safe",  color: "emerald" },
-  { value: 2, label: "Pos 2", sublabel: "Mid",   color: "yellow"  },
-  { value: 3, label: "Pos 3", sublabel: "Off",   color: "orange"  },
-  { value: 4, label: "Pos 4", sublabel: "Sup",   color: "blue"    },
-  { value: 5, label: "Pos 5", sublabel: "Hard",  color: "purple"  },
+  { value: 1, label: "P1", sublabel: "Safe",  color: "emerald" },
+  { value: 2, label: "P2", sublabel: "Mid",   color: "yellow"  },
+  { value: 3, label: "P3", sublabel: "Off",   color: "orange"  },
+  { value: 4, label: "P4", sublabel: "Sup",   color: "blue"    },
+  { value: 5, label: "P5", sublabel: "Hard",  color: "purple"  },
 ];
 
 const posColorMap: Record<string, string> = {
@@ -32,8 +30,7 @@ const posColorMap: Record<string, string> = {
 };
 
 const posDisabledClass =
-  "border-gray-800 bg-gray-900/20 text-gray-700 cursor-not-allowed opacity-40";
-
+  "border-gray-800 bg-gray-900/20 text-gray-700 cursor-not-allowed opacity-30";
 const posInactiveClass =
   "border-gray-700 bg-gray-800/40 text-gray-500 hover:border-gray-500 hover:text-gray-300";
 
@@ -43,8 +40,8 @@ type EnemyHeroPickerProps = {
   onAdd: (hero: Hero) => void;
   onRemove: (heroId: number) => void;
   onSetPosition: (heroId: number, position: number | null) => void;
-  maxEnemies?: number;   // ← new, defaults to 5
-  label?: string;        // ← new, custom label
+  maxEnemies?: number;
+  label?: string;
 };
 
 export default function EnemyHeroPicker({
@@ -53,12 +50,11 @@ export default function EnemyHeroPicker({
   onAdd,
   onRemove,
   onSetPosition,
-  maxEnemies = 5,        // ← use this instead of MAX_ENEMIES constant
+  maxEnemies = 5,
   label,
 }: EnemyHeroPickerProps) {
   const [search, setSearch] = useState("");
 
-  // Track which positions are already taken by other enemies
   const takenPositions = useMemo(() => {
     const taken = new Set<number>();
     enemies.forEach((e) => {
@@ -78,27 +74,29 @@ export default function EnemyHeroPicker({
 
   return (
     <div className="w-full">
+      {/* Label */}
       <p className="text-xs text-gray-500 uppercase tracking-widest mb-3 text-center">
-      {label ?? "Pick Enemy Heroes"}{" "}
-      <span className="text-gray-600">({enemies.length}/{maxEnemies})</span>
-    </p>
+        {label ?? "Pick Enemy Heroes"}{" "}
+        <span className="text-gray-600 normal-case">
+          ({enemies.length}/{maxEnemies})
+        </span>
+      </p>
 
-      {/* Selected enemies with position picker */}
-      <div className="space-y-2 mb-4">
+      {/* Selected enemies */}
+      <div className="space-y-3 mb-4">
         {enemies.length === 0 ? (
           <div className="flex items-center justify-center border border-dashed
                           border-gray-700 rounded-xl text-gray-600 text-sm py-4">
             Click heroes below to add enemies
           </div>
         ) : (
-          enemies.map((entry) => {
-            return (
-              <div
-                key={entry.hero.id}
-                className="flex items-center gap-2 p-2 bg-gray-800/40
-                           border border-gray-700/50 rounded-xl"
-              >
-                {/* Portrait */}
+          enemies.map((entry) => (
+            <div
+              key={entry.hero.id}
+              className="bg-gray-800/40 border border-gray-700/50 rounded-xl p-2"
+            >
+              {/* Row 1: portrait + name + remove */}
+              <div className="flex items-center gap-2 mb-2">
                 <div className="relative w-14 h-9 rounded-lg overflow-hidden
                                 border border-red-500/40 flex-shrink-0">
                   <Image
@@ -109,65 +107,59 @@ export default function EnemyHeroPicker({
                     unoptimized
                   />
                 </div>
-
-                {/* Name */}
-                <p className="text-xs font-semibold text-white w-20
-                               truncate flex-shrink-0">
+                <p className="text-sm font-semibold text-white flex-1 truncate">
                   {entry.hero.name}
                 </p>
-
-                {/* Position buttons — disable already-taken positions */}
-                <div className="flex gap-1 flex-1">
-                  {POSITIONS.map((pos) => {
-                    const isActive = entry.position === pos.value;
-                    // A position is taken if another enemy already has it
-                    const isTaken =
-                      !isActive && takenPositions.has(pos.value);
-
-                    return (
-                      <button
-                        key={pos.value}
-                        disabled={isTaken}
-                        onClick={() =>
-                          onSetPosition(
-                            entry.hero.id,
-                            isActive ? null : pos.value
-                          )
-                        }
-                        title={
-                          isTaken
-                            ? `Position ${pos.value} already assigned`
-                            : `Set as ${pos.label}`
-                        }
-                        className={`flex-1 flex flex-col items-center py-1
-                                    rounded-lg border text-[9px] font-bold
-                                    transition-all
-                                    ${
-                                      isTaken
-                                        ? posDisabledClass
-                                        : isActive
-                                        ? posColorMap[pos.color]
-                                        : posInactiveClass
-                                    }`}
-                      >
-                        <span>{pos.label}</span>
-                        <span className="opacity-70">{pos.sublabel}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Remove */}
                 <button
                   onClick={() => onRemove(entry.hero.id)}
-                  className="text-gray-600 hover:text-red-400
-                             transition-colors flex-shrink-0 p-1"
+                  className="flex-shrink-0 p-1.5 rounded-lg bg-gray-700/50
+                             text-gray-500 hover:text-red-400 hover:bg-red-500/10
+                             transition-colors"
                 >
-                  <X size={14} />
+                  <X size={13} />
                 </button>
               </div>
-            );
-          })
+
+              {/* Row 2: position buttons on their own row */}
+              <div className="flex gap-1.5">
+                {POSITIONS.map((pos) => {
+                  const isActive = entry.position === pos.value;
+                  const isTaken = !isActive && takenPositions.has(pos.value);
+                  return (
+                    <button
+                      key={pos.value}
+                      disabled={isTaken}
+                      onClick={() =>
+                        onSetPosition(
+                          entry.hero.id,
+                          isActive ? null : pos.value
+                        )
+                      }
+                      title={
+                        isTaken
+                          ? `Position ${pos.value} already assigned`
+                          : `Set as ${pos.label}`
+                      }
+                      className={`flex-1 flex flex-col items-center py-1.5
+                                  rounded-lg border text-[10px] font-bold
+                                  transition-all leading-tight
+                                  ${isTaken
+                                    ? posDisabledClass
+                                    : isActive
+                                    ? posColorMap[pos.color]
+                                    : posInactiveClass
+                                  }`}
+                    >
+                      <span>{pos.label}</span>
+                      <span className="opacity-60 text-[8px]">
+                        {pos.sublabel}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))
         )}
       </div>
 
@@ -183,7 +175,7 @@ export default function EnemyHeroPicker({
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search enemy hero..."
+              placeholder="Search hero..."
               className="w-full bg-gray-800/80 border border-gray-700
                          focus:border-red-500/60 focus:ring-1 focus:ring-red-500/30
                          text-white placeholder-gray-600 rounded-lg
@@ -191,8 +183,9 @@ export default function EnemyHeroPicker({
             />
           </div>
 
-          <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10
-                          gap-1.5 max-h-44 overflow-y-auto pr-1">
+          {/* Hero grid — responsive columns */}
+          <div className="grid grid-cols-5 xs:grid-cols-6 sm:grid-cols-8
+                          md:grid-cols-10 gap-1.5 max-h-40 overflow-y-auto pr-1">
             {filteredHeroes.map((hero) => (
               <button
                 key={hero.id}
@@ -200,7 +193,7 @@ export default function EnemyHeroPicker({
                 title={hero.name}
                 className="relative aspect-video rounded-md overflow-hidden
                            border border-gray-700 hover:border-red-400/60
-                           transition-all hover:scale-110 flex-shrink-0"
+                           transition-all hover:scale-105 active:scale-95"
               >
                 <Image
                   src={getDotaImageUrl(hero.slug)}
