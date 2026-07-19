@@ -183,17 +183,18 @@ export default function EnemyHeroPicker({
             />
           </div>
 
-          {/* Hero grid — responsive columns */}
-          <div className="grid grid-cols-5 xs:grid-cols-6 sm:grid-cols-8
-                          md:grid-cols-10 gap-1.5 max-h-40 overflow-y-auto pr-1">
+          {/* Hero grid — more columns on mobile for smaller cards */}
+          <div className="grid grid-cols-7 sm:grid-cols-9 md:grid-cols-10
+                          gap-1 max-h-44 overflow-y-auto pr-0.5">
             {filteredHeroes.map((hero) => (
               <button
                 key={hero.id}
                 onClick={() => onAdd(hero)}
                 title={hero.name}
-                className="relative aspect-video rounded-md overflow-hidden
-                           border border-gray-700 hover:border-red-400/60
-                           transition-all hover:scale-105 active:scale-95"
+                className="relative w-full rounded-md overflow-hidden
+                          border border-gray-700/80 hover:border-red-400/60
+                          active:scale-95 transition-all"
+                style={{ aspectRatio: "16/9" }}
               >
                 <Image
                   src={getDotaImageUrl(hero.slug)}
